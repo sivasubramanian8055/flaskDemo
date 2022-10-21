@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="This is a login page template based on Bootstrap 5">
+	<title>Transaction History</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	{% include 'Navbar.html' %}
+	<section class="h-100 mt-50">
+		<div class="container h-100">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Transaction id</th>
+                            <th>Transaction Type</th>
+                            <th>Transfered Amount</th>
+                            <th>Beneficiary</th>
+                            <th>Transfered By</th>
+                            <th>Date of Transaction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.id }}</td>
+                            <td>
+                                    {% if transaction.beneficiary == session.id %}
+                                        {% if transaction.trans_type == "Debit" %}
+                                            Credit
+                                        {% else %}
+                                            Debit
+                                        {% endif %}
+                                    {% else %}
+                                        {{ transaction.trans_type }}
+                                    {% endif %}
+                                </td>
+                            <td>{{ transaction.trans_amount }}</td>
+                            <td>
+                                    {% if transaction.beneficiary==0 %}
+                                        Self
+                                    {% elif transaction.beneficiary == session.id %}
+
+                                    {% else %}
+                                    {{ transaction.beneficiary }}
+                                    {% endif %}
+ 
+                            </td>
+                            <td>
+                            {% if transaction.beneficiary == session.id %}
+                                {{transaction.user_id}}                            
+                            {% endif %}
+                            </td>
+                            <td>{{ transaction.withdraw_time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+					<div class="text-center mt-5 text-muted">
+						Copyright &copy; 2017-2022 &mdash; FlaskDemo 
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
